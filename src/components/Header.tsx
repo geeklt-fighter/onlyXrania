@@ -1,11 +1,4 @@
 "use client"
-import { FaYoutube, FaInstagram, FaPatreon } from 'react-icons/fa';
-
-const SOCIAL_LINKS = {
-  youtube: "https://www.youtube.com/@only_x_rania",
-  instagram: "https://www.instagram.com/rania_elegant/",
-  patreon: "https://www.patreon.com/c/RaniaPrivateFantasies"
-};
 
 export default function Header() {
   // 回到頂部的處理函數

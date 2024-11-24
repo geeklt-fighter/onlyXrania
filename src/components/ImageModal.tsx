@@ -1,4 +1,5 @@
 import { FC, useEffect } from 'react';
+import Image from 'next/image'
 
 interface ImageModalProps {
   src: string;
@@ -43,11 +44,20 @@ const ImageModal: FC<ImageModalProps> = ({ src, alt, isOpen, onClose }) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
-        <img 
-          src={src} 
-          alt={alt} 
-          className="max-w-full max-h-[90vh] object-contain rounded-lg"
-        />
+        <div className="relative w-full h-[90vh]">
+          <Image 
+            src={src} 
+            alt={alt} 
+            fill
+            sizes="(max-width: 768px) 100vw, 80vw"
+            priority
+            className="object-contain"
+            style={{
+              maxWidth: '100%',
+              height: 'auto'
+            }}
+          />
+        </div>
       </div>
     </div>
   );

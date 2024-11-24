@@ -1,7 +1,7 @@
 "use client"
 import { FC,FormEvent } from 'react';
 import FadeInUp from '@/components/animations/FadeInUp';
-import { FaYoutube, FaInstagram, FaPatreon, FaUser } from 'react-icons/fa';
+import { FaYoutube, FaPatreon, FaUser } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 
 
