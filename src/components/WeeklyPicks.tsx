@@ -26,7 +26,7 @@ const weeklyPicks = [
     title: "Dripping in Desire, Just for You 😘🔥",
     description: "Baby, I’m feeling extra naughty today... all dressed up in this glossy little number, just for your eyes. You see how everything glistens? I know you’re already imagining what happens next. My fingers are just teasing the surface, but I’m waiting for you to take control. Let’s make this moment sizzle together… don't make me wait too long. I promise, there’s so much more I’m dying to show you. Let’s get a little closer, shall we? 😏💦",
     image: "/images/series/4k_ins_00001.png",
-    url: "https://linktr.ee/rania_sunshine"
+    url: "https://www.patreon.com/posts/dripping-in-just-116342856?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=postshare_creator&utm_content=join_link"
   }
 ];
 
