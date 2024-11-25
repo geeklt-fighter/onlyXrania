@@ -1,14 +1,16 @@
 import { Montserrat, Playfair_Display } from 'next/font/google';
 import type { Metadata } from 'next';
 import './globals.css';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Analytics } from '@vercel/analytics/react';
 
-const montserrat = Montserrat({ 
+const montserrat = Montserrat({
   subsets: ['latin'],
   variable: '--font-montserrat',
   display: 'swap',
 });
 
-const playfair = Playfair_Display({ 
+const playfair = Playfair_Display({
   subsets: ['latin'],
   variable: '--font-playfair',
   display: 'swap',
@@ -39,18 +41,20 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${montserrat.variable} ${playfair.variable}`}>
       <head>
-        <link 
-          rel="icon" 
+        <link
+          rel="icon"
           href={ICON_URL}
           type="image/svg+xml"
         />
-        <link 
-          rel="apple-touch-icon" 
+        <link
+          rel="apple-touch-icon"
           href={ICON_URL}
         />
       </head>
       <body className="font-sans">
         {children}
+        <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
