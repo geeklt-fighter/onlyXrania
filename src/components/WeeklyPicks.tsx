@@ -35,8 +35,33 @@ const WeeklyPicks: FC = () => {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
+  // 定義結構化數據
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": weeklyPicks.map((pick, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": pick.title,
+      "description": pick.description,
+      "image": {
+        "@type": "ImageObject",
+        "url": pick.image,
+        "height": 800,
+        "width": 600
+      },
+      "url": pick.url
+    }))
+  };
+
   return (
     <section className="relative bg-black/90 py-32 sm:py-40 overflow-hidden">
+      {/* 注入結構化數據 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      
       <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/80" />
       
       <div className="relative container mx-auto px-4 sm:px-6">

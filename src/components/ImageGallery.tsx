@@ -43,7 +43,18 @@ const images = [
   // 可以添加更多圖片
 ];
 
-
+const imageGallerySchema = {
+  "@context": "https://schema.org",
+  "@type": "ImageGallery",
+  "name": "OnlyXRania Photo Gallery",
+  "description": "Exclusive premium photos by Rania",
+  "image": images.map(img => ({
+    "@type": "ImageObject",
+    "contentUrl": img.src,
+    "description": img.alt,
+    "name": img.title
+  }))
+};
 
 const ImageGallery: FC = () => {
   const [visibleIndices, setVisibleIndices] = useState([
@@ -102,7 +113,7 @@ const ImageGallery: FC = () => {
   }, [visibleIndices, isAnimating]);
 
   return (
-    <section className="relative bg-black/90 py-32 sm:py-40 overflow-hidden">
+    <section id="gallery" className="relative bg-black/90 py-32 sm:py-40 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/80" />
       
       <div className="relative container mx-auto px-4 sm:px-6">
@@ -187,7 +198,7 @@ const ImageGallery: FC = () => {
                     key={index}
                     onClick={() => handleDotClick(index)}
                     className={`h-1.5 rounded-full transition-all duration-300 ${
-                      index === visibleIndices[1]  // 使用中間索引作為當前活動索引
+                      index === visibleIndices[1]  // 使��中間索引作為當前活動索引
                         ? 'w-8 bg-amber-200' 
                         : 'w-2 bg-white/20 hover:bg-white/30'
                     }`}
@@ -205,6 +216,12 @@ const ImageGallery: FC = () => {
           </ScrollReveal>
         </div>
       </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(imageGallerySchema)
+        }}
+      />
     </section>
   );
 };

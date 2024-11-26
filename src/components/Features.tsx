@@ -49,9 +49,22 @@ const premiumFeatures = [
     }
 ];
 
+const videoSchema = {
+  "@context": "https://schema.org",
+  "@type": "VideoGallery",
+  "name": "OnlyXRania Video Gallery",
+  "description": "Premium video content by Rania",
+  "video": previewVideos.map(video => ({
+    "@type": "VideoObject",
+    "name": video.title,
+    "description": video.description,
+    "contentUrl": video.videoUrl
+  }))
+};
+
 const Features: FC = () => {
     return (
-        <section className="py-32 sm:py-40">
+        <section id="features" className="py-32 sm:py-40">
             <div className="container mx-auto px-4 sm:px-6">
                 {/* Header */}
                 <ScrollReveal>
@@ -114,6 +127,12 @@ const Features: FC = () => {
                     ))}
                 </div>
             </div>
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify(videoSchema)
+              }}
+            />
         </section>
     );
 };

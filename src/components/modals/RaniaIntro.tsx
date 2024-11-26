@@ -65,7 +65,7 @@ const RaniaIntro: FC<RaniaIntroProps> = ({ isOpen, onClose }) => {
             
             <div className="mt-6 grid grid-cols-3 gap-4">
               <div className="text-center p-4 rounded-xl bg-white/5">
-                <div className="text-2xl font-bold text-amber-200">2.7K+</div>
+                <div className="text-2xl font-bold text-amber-200">27K+</div>
                 <div className="text-sm text-zinc-500">Followers</div>
               </div>
               <div className="text-center p-4 rounded-xl bg-white/5">
