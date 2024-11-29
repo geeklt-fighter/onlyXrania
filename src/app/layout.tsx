@@ -52,7 +52,10 @@ export const metadata: Metadata = {
   description: 'Join OnlyXRania for exclusive premium adult content, artistic photos, and intimate experiences. High-quality content updated weekly.',
   keywords: 'OnlyXRania, premium content, adult content, exclusive photos, Rania model',
   verification: {
-    google: 'qL0xwJSzlkolxPXg97ibNyTlLeS6BodlT79a8w7WdFw',
+    google: process.env.GOOGLE_SITE_VERIFICATION || '',
+    other: {
+      me: ['https://only-x-rania.vercel.app/'],
+    },
   },
   openGraph: {
     type: 'website',
@@ -76,8 +79,25 @@ export const metadata: Metadata = {
     creator: '@rania_chic'
   },
   alternates: {
-    canonical: 'https://only-x-rania.vercel.app/'
-  }
+    canonical: '/',
+    languages: {
+      'en-US': '/',
+      'en-GB': '/',
+      'x-default': '/',
+    },
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'notranslate': true,
+    },
+  },
 };
 
 export const viewport: Viewport = {
@@ -125,6 +145,8 @@ export default function RootLayout({
           href="/images/hero/1k_ins_02167_.png"
           as="image"
         />
+        <meta name="revisit-after" content="3 days" />
+        <link rel="manifest" href="/manifest.json" />
       </head>
       <body className={`${montserrat.variable} ${playfair.variable} font-sans`}>
         {children}

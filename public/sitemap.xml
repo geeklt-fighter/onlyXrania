@@ -2,8 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://only-x-rania.vercel.app/</loc>
-    <lastmod>2024-11-26</lastmod>
+    <lastmod>2024-11-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 </urlset> 
+<!-- TODO: 動態化 sitemap.xml 類似manifest.ts -->
