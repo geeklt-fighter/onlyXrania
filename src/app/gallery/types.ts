@@ -4,6 +4,7 @@ export interface BlobImage {
   size: number;
   uploadedAt: string;
   pathname: string;
+  title?: string;
 }
 
 // 緩存數據的接口

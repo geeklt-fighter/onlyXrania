@@ -4,8 +4,11 @@ import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Metadata } from 'next';
 import { galleryCache } from './cache';
 import type { BlobImage } from './types';
+import { galleryConfig } from './config';
+import { ImageModal } from './components/ImageModal';
 
 // 圖片卡片組件
 const ImageCard = ({ image, currentImage, index }: { 
@@ -14,63 +17,102 @@ const ImageCard = ({ image, currentImage, index }: {
   index: number;
 }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 預加載大圖
+  useEffect(() => {
+    if (isModalOpen) {
+      const preloadImage = new window.Image();
+      preloadImage.src = image.url;
+    }
+  }, [isModalOpen, image.url]);
 
   return (
-    <div 
-      className={`group relative aspect-[3/4] rounded-xl overflow-hidden
-        ${image.url === currentImage ? 'ring-2 ring-amber-200' : ''}`}
-    >
-      {isLoading && (
-        <div className="absolute inset-0 bg-gray-800 animate-pulse" />
+    <>
+      <article
+        onClick={() => setIsModalOpen(true)}
+        className={`group relative aspect-[3/4] rounded-xl overflow-hidden 
+          cursor-pointer
+          ${image.url === currentImage ? 'ring-2 ring-amber-200' : ''}`}
+        role="button"
+        aria-label={`View ${image.title || 'gallery image'} in modal`}
+      >
+        {isLoading && !error && (
+          <div className="absolute inset-0 bg-gray-800/80 animate-pulse" />
+        )}
+        
+        <Image
+          src={image.url}
+          alt={image.title || `Gallery image ${index + 1}`}
+          fill
+          priority={index < 4}
+          loading={index < 4 ? undefined : "lazy"}
+          className={`
+            object-cover transition-all duration-300
+            group-hover:scale-110
+            ${isLoading ? 'opacity-0' : 'opacity-100'}
+          `}
+          sizes="(max-width: 640px) calc(50vw - 24px), 
+                 (max-width: 768px) calc(33.3vw - 24px),
+                 (max-width: 1024px) calc(25vw - 24px),
+                 calc(20vw - 24px)"
+          onLoad={() => setIsLoading(false)}
+          onError={() => {
+            setError(true);
+            setIsLoading(false);
+          }}
+          quality={75}
+        />
+        
+        {error && (
+          <div className="absolute inset-0 bg-gray-800 flex items-center justify-center">
+            <p className="text-white/70 text-sm">Failed to load image</p>
+          </div>
+        )}
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent 
+                      opacity-0 group-hover:opacity-100 transition-all duration-300" />
+      </article>
+
+      {isModalOpen && (
+        <ImageModal
+          imageUrl={image.url}
+          thumbnailUrl={image.url}
+          onClose={() => setIsModalOpen(false)}
+        />
       )}
-      
-      <Image
-        src={image.url}
-        alt={image.name}
-        fill
-        loading="lazy"  // 統一使用懶加載
-        className={`
-          object-cover transition-all duration-500 
-          group-hover:scale-110
-          ${isLoading ? 'opacity-0' : 'opacity-100'}
-        `}
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        onLoad={() => setIsLoading(false)}
-        quality={75}
-      />
-      
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent 
-                    opacity-0 group-hover:opacity-100 transition-all duration-300">
-        <div className="absolute bottom-0 left-0 right-0 p-4">
-          <h3 className="text-white text-sm font-medium truncate">
-            {image.name}
-          </h3>
-          <p className="text-white/70 text-xs">
-            {new Date(image.uploadedAt).toLocaleDateString()}
-          </p>
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 
 export default function GalleryPage() {
   const searchParams = useSearchParams();
-  const initialFolder = searchParams.get('folder') || 'hero';
+  const initialFolder = searchParams.get('folder') || 'midnight-temptation';
   const currentImage = searchParams.get('currentImage');
 
   const [images, setImages] = useState<BlobImage[]>([]);
   const [activeFolder, setActiveFolder] = useState(initialFolder);
   const [loading, setLoading] = useState(true);
   const [visibleImages, setVisibleImages] = useState<BlobImage[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchImages = async () => {
       setLoading(true);
+      setError(null);
       
-      // 從緩存獲取
-      const cachedData = galleryCache.get(activeFolder);
-      if (cachedData) {
+      const currentFolder = galleryConfig.folders.find(f => f.id === activeFolder);
+      if (!currentFolder) {
+        setError('Folder not found');
+        setLoading(false);
+        return;
+      }
+
+      // 嘗試從緩存獲取
+      const cachedData = galleryCache.get(currentFolder.path);
+      if (cachedData && cachedData.length > 0) {
+        console.log('Using cached data for:', currentFolder.path);
         setImages(cachedData);
         setVisibleImages(cachedData.slice(0, 12));
         setLoading(false);
@@ -78,17 +120,32 @@ export default function GalleryPage() {
       }
 
       try {
-        const response = await fetch(`/api/blob?folder=${activeFolder}`);
-        if (!response.ok) throw new Error('Failed to fetch images');
-        const data = await response.json();
+        const folderPath = encodeURIComponent(currentFolder.path);
+        const response = await fetch(`/api/blob?folder=${folderPath}`);
         
+        if (!response.ok) {
+          throw new Error(`Failed to fetch images: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        console.log('Fresh data fetched for:', currentFolder.path, data);
+        
+        if (!Array.isArray(data)) {
+          throw new Error('Invalid data format');
+        }
+
         setImages(data);
         setVisibleImages(data.slice(0, 12));
         
         // 存入緩存
-        galleryCache.set(activeFolder, data);
+        if (data.length > 0) {
+          galleryCache.set(currentFolder.path, data);
+        }
       } catch (error) {
         console.error('Error fetching images:', error);
+        setError(error instanceof Error ? error.message : 'Failed to load images');
+        // 清除失敗的緩存
+        galleryCache.remove(currentFolder.path);
       } finally {
         setLoading(false);
       }
@@ -97,12 +154,10 @@ export default function GalleryPage() {
     fetchImages();
   }, [activeFolder]);
 
-  const folders = ['hero', 'series'];
-
   return (
-    <div className="min-h-screen bg-black/95 py-16">
+    <main className="min-h-screen bg-black/95 py-16">
       <div className="container mx-auto px-4">
-        <div className="absolute top-8 left-8">
+        <nav className="absolute top-8 left-8">
           <Link
             href="/"
             className="inline-flex items-center px-4 py-2 rounded-full 
@@ -110,6 +165,7 @@ export default function GalleryPage() {
                      text-sm text-white/90 
                      hover:bg-white/20 transition-colors
                      border border-white/10"
+            aria-label="Return to homepage"
           >
             <svg 
               className="w-4 h-4 mr-2" 
@@ -126,58 +182,68 @@ export default function GalleryPage() {
             </svg>
             Back to Home
           </Link>
-        </div>
+        </nav>
 
-        <div className="text-center mb-12">
+        <header className="text-center mb-12">
           <h1 className="text-4xl font-bold text-white mb-4">Photo Gallery</h1>
           <p className="text-gray-400">Browse through our collection</p>
-        </div>
+        </header>
 
-        <div className="flex justify-center gap-4 mb-12">
-          {folders.map((folder) => (
+        <nav className="flex justify-center gap-4 mb-12 flex-wrap" aria-label="Gallery categories">
+          {galleryConfig.folders.map((folder) => (
             <button
-              key={folder}
-              onClick={() => setActiveFolder(folder)}
+              key={folder.id}
+              onClick={() => setActiveFolder(folder.id)}
               className={`px-6 py-2 rounded-full text-sm font-medium 
                 transition-all duration-300
                 hover:scale-105 active:scale-95
-                ${activeFolder === folder 
+                ${activeFolder === folder.id 
                   ? 'bg-amber-200 text-black' 
                   : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
+              title={folder.description}
+              aria-current={activeFolder === folder.id ? 'page' : undefined}
             >
-              {folder.charAt(0).toUpperCase() + folder.slice(1)}
+              {folder.name}
             </button>
           ))}
-        </div>
+        </nav>
 
-        {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {[...Array(8)].map((_, index) => (
-              <div 
-                key={index}
-                className="aspect-[3/4] rounded-xl bg-gray-800 animate-pulse"
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {visibleImages.map((image, index) => (
-              <ImageCard 
-                key={image.url}
-                image={image}
-                currentImage={currentImage}
-                index={index}
-              />
-            ))}
+        <section aria-label="Gallery images">
+          {loading ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {[...Array(8)].map((_, index) => (
+                <div 
+                  key={index}
+                  className="aspect-[3/4] rounded-xl bg-gray-800 animate-pulse"
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {visibleImages.map((image, index) => (
+                <ImageCard 
+                  key={image.url}
+                  image={image}
+                  currentImage={currentImage}
+                  index={index}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+
+        {error && (
+          <div className="text-center text-red-400 py-20">
+            {error}
           </div>
         )}
 
-        {!loading && visibleImages.length === 0 && (
+        {!loading && !error && visibleImages.length === 0 && (
           <div className="text-center text-white/70 py-20">
             No images found in this folder
           </div>
         )}
       </div>
-    </div>
+    </main>
   );
 } 

@@ -5,8 +5,7 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const folder = searchParams.get('folder');
-    
-    console.log('Fetching blobs for folder:', folder);
+
 
     const { blobs } = await list({
       token: process.env.NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN,

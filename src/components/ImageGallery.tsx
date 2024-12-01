@@ -12,29 +12,14 @@ const images = [
     title: "Midnight Temptation"
   },
   {
-    src: "/images/hero/1k_ins_02167_.png",
-    alt: "Rania on delicate white bed showcasing feminine curves",
-    title: "Angelic Desires"
-  },
-  {
-    src: "/images/hero/1k_ins_02179_.png",
-    alt: "Rania in sensual pose wearing exquisite black lingerie set",
+    src: "/images/hero/1k_ins_02257_.png",
+    alt: "Rania in alluring satan displaying confident pose",
     title: "Dark Romance"
-  },
-  {
-    src: "/images/hero/1k_ins_04071_.png",
-    alt: "Rania in alluring  lingerie displaying confident pose",
-    title: "Scarlet Passion"
   },
   {
     src: "/images/hero/1k_ins_04076_.png",
     alt: "Rania in intimate boudoir setting with lace details",
     title: "Sweet Surrender"
-  },
-  {
-    src: "/images/hero/1k_ins_04093_.png",
-    alt: "Rania in artistic silhouette highlighting elegant curves",
-    title: "Shadow Dance"
   },
   {
     src: "/images/hero/1k_ins_04118_.png",
