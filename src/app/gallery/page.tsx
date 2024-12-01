@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
@@ -86,7 +87,8 @@ const ImageCard = ({ image, currentImage, index }: {
   );
 };
 
-export default function GalleryPage() {
+// Create a wrapper component for the gallery content
+function GalleryContent() {
   const searchParams = useSearchParams();
   const initialFolder = searchParams.get('folder') || 'midnight-temptation';
   const currentImage = searchParams.get('currentImage');
@@ -245,5 +247,27 @@ export default function GalleryPage() {
         )}
       </div>
     </main>
+  );
+}
+
+// Main page component with Suspense
+export default function GalleryPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-black/95 py-16">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {[...Array(8)].map((_, index) => (
+              <div 
+                key={index}
+                className="aspect-[3/4] rounded-xl bg-gray-800 animate-pulse"
+              />
+            ))}
+          </div>
+        </div>
+      </main>
+    }>
+      <GalleryContent />
+    </Suspense>
   );
 } 
