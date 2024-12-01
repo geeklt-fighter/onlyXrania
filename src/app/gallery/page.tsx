@@ -4,14 +4,8 @@ import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-
-interface BlobImage {
-  name: string;
-  url: string;
-  size: number;
-  uploadedAt: string;
-  pathname: string;
-}
+import { galleryCache } from './cache';
+import type { BlobImage } from './types';
 
 // 圖片卡片組件
 const ImageCard = ({ image, currentImage, index }: { 
@@ -68,16 +62,31 @@ export default function GalleryPage() {
   const [images, setImages] = useState<BlobImage[]>([]);
   const [activeFolder, setActiveFolder] = useState(initialFolder);
   const [loading, setLoading] = useState(true);
+  const [visibleImages, setVisibleImages] = useState<BlobImage[]>([]);
 
   useEffect(() => {
     const fetchImages = async () => {
       setLoading(true);
+      
+      // 從緩存獲取
+      const cachedData = galleryCache.get(activeFolder);
+      if (cachedData) {
+        setImages(cachedData);
+        setVisibleImages(cachedData.slice(0, 12));
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await fetch(`/api/blob?folder=${activeFolder}`);
         if (!response.ok) throw new Error('Failed to fetch images');
         const data = await response.json();
-        console.log('Fetched images:', data);
+        
         setImages(data);
+        setVisibleImages(data.slice(0, 12));
+        
+        // 存入緩存
+        galleryCache.set(activeFolder, data);
       } catch (error) {
         console.error('Error fetching images:', error);
       } finally {
@@ -152,7 +161,7 @@ export default function GalleryPage() {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {images.map((image, index) => (
+            {visibleImages.map((image, index) => (
               <ImageCard 
                 key={image.url}
                 image={image}
@@ -163,7 +172,7 @@ export default function GalleryPage() {
           </div>
         )}
 
-        {!loading && images.length === 0 && (
+        {!loading && visibleImages.length === 0 && (
           <div className="text-center text-white/70 py-20">
             No images found in this folder
           </div>
