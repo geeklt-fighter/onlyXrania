@@ -3,6 +3,7 @@ import { FC, useState, useCallback } from 'react';
 import Image from 'next/image';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import ScrollReveal from './animations/ScrollReveal';
+import Link from 'next/link';
 
 const images = [
   {
@@ -170,12 +171,20 @@ const ImageGallery: FC = () => {
                     <h3 className="text-xl font-medium text-white mb-2">
                       {images[imageIndex].title}
                     </h3>
-                    <span className="inline-flex px-4 py-1.5 rounded-full 
-                                   bg-white/10 backdrop-blur-sm 
-                                   text-xs text-white/90 
-                                   border border-white/10">
+                    <Link 
+                      href={{
+                        pathname: '/gallery',
+                        query: { 
+                          currentImage: images[imageIndex].src
+                        }
+                      }}
+                      className="inline-flex px-4 py-1.5 rounded-full 
+                               bg-white/10 backdrop-blur-sm 
+                               text-xs text-white/90 
+                               border border-white/10
+                               hover:bg-white/20 transition-colors">
                       View Gallery
-                    </span>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -198,7 +207,7 @@ const ImageGallery: FC = () => {
                     key={index}
                     onClick={() => handleDotClick(index)}
                     className={`h-1.5 rounded-full transition-all duration-300 ${
-                      index === visibleIndices[1]  // 使��中間索引作為當前活動索引
+                      index === visibleIndices[1]  // 使中間索引作為當前活動索引
                         ? 'w-8 bg-amber-200' 
                         : 'w-2 bg-white/20 hover:bg-white/30'
                     }`}
