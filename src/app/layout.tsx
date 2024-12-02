@@ -69,7 +69,9 @@ export const metadata: Metadata = {
         url: '/images/hero/1k_ins_02167_.png',
         width: 1200,
         height: 630,
-        alt: 'OnlyXRania Preview'
+        alt: 'OnlyXRania Preview',
+        secureUrl: 'https://only-x-rania.vercel.app/images/hero/1k_ins_02167_.png',
+        type: 'image/png',
       }
     ]
   },
@@ -113,7 +115,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${playfair.variable}`}>
       <head>
         <link
           rel="icon"
@@ -146,7 +148,6 @@ export default function RootLayout({
           as="image"
         />
         <meta name="revisit-after" content="3 days" />
-        <link rel="manifest" href="/manifest.json" />
       </head>
       <body className={`${montserrat.variable} ${playfair.variable} font-sans`}>
         {children}

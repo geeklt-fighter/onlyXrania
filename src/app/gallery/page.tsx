@@ -5,7 +5,6 @@ import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Metadata } from 'next';
 import { galleryCache } from './cache';
 import type { BlobImage } from './types';
 import { galleryConfig } from './config';
