@@ -23,18 +23,16 @@ export const galleryCache = {
       const { data, timestamp } = JSON.parse(cached) as CacheData<BlobImage[]>;
       
       if (!Array.isArray(data) || data.length === 0) {
-        console.log(`Invalid cache data for folder: ${folder}`);
+
         this.remove(folder);
         return null;
       }
 
       if (Date.now() - timestamp > CACHE_EXPIRY) {
-        console.log(`Cache expired for folder: ${folder}`);
         this.remove(folder);
         return null;
       }
 
-      console.log(`Valid cache found for folder: ${folder}, items: ${data.length}`);
       return data;
     } catch (error) {
       console.error('Cache error:', error);

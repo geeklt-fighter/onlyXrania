@@ -89,7 +89,6 @@ const ImageGallery: FC = () => {
     const currentIndex = visibleIndices[1];
     if (targetIndex === currentIndex) return;
     
-    console.log('Navigating to image:', images[targetIndex]);
 
     setIsAnimating(true);
     const direction = targetIndex > currentIndex ? 'right' : 'left';

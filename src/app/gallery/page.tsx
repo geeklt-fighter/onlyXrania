@@ -92,11 +92,6 @@ function GalleryContent() {
   const initialFolder = searchParams.get('folder') || 'midnight-temptation';
   const currentImage = searchParams.get('currentImage');
 
-  console.log('URL Parameters:', {
-    folder: searchParams.get('folder'),
-    currentImage: searchParams.get('currentImage')
-  });
-
   const [activeFolder, setActiveFolder] = useState(initialFolder);
   const [images, setImages] = useState<BlobImage[]>([]);
   const [visibleImages, setVisibleImages] = useState<BlobImage[]>([]);
@@ -108,24 +103,26 @@ function GalleryContent() {
       setLoading(true);
       setError(null);
 
-      console.log('Trying to fetch images for folder:', activeFolder);
-      console.log('Available folders:', galleryConfig.folders);
-      
-      const currentFolder = galleryConfig.folders.find(f => {
-        console.log('Comparing:', f.id, 'with:', activeFolder);
-        return f.id === activeFolder;
-      });
+      const currentFolder = galleryConfig.folders.find(f => f.id === activeFolder);
 
       if (!currentFolder) {
-        console.error('Folder mapping not found for:', activeFolder);
+        console.error('Folder not found:', activeFolder);
         setError('Folder not found');
         setLoading(false);
         return;
       }
 
       try {
+        // 先檢查緩存
+        const cachedData = galleryCache.get(currentFolder.path);
+        if (cachedData && cachedData.length > 0) {
+          setImages(cachedData);
+          setVisibleImages(cachedData.slice(0, 12));
+          setLoading(false);
+          return;
+        }
+
         const folderPath = encodeURIComponent(currentFolder.path);
-        console.log('Fetching from path:', folderPath);
         
         const response = await fetch(`/api/blob?folder=${folderPath}`);
         
@@ -134,7 +131,6 @@ function GalleryContent() {
         }
         
         const data = await response.json();
-        console.log('Received data:', data);
 
         if (!Array.isArray(data)) {
           throw new Error('Invalid data format');
@@ -158,7 +154,6 @@ function GalleryContent() {
 
   // 當點擊導航按鈕時
   const handleFolderClick = (folderId: string) => {
-    console.log('Direct click folder:', folderId);  // 直接點擊時的 folder
     setActiveFolder(folderId);
   };
 
