@@ -32,7 +32,6 @@ export async function GET(request: Request) {
     
     return NextResponse.json(filteredBlobs);
   } catch (error) {
-    console.error('Failed to fetch blobs:', error);
     return NextResponse.json({ 
       error: 'Failed to fetch blobs',
       details: error instanceof Error ? error.message : 'Unknown error'

@@ -34,6 +34,44 @@ const nextConfig: NextConfig = {
             value: 'public, max-age=31536000, immutable'
           }
         ]
+      },
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'index, follow'
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff'
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin'
+          }
+        ]
+      },
+      {
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex, nofollow'
+          },
+          {
+            key: 'Cache-Control',
+            value: 'no-store, no-cache, must-revalidate, proxy-revalidate'
+          },
+          {
+            key: 'Pragma',
+            value: 'no-cache'
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY'
+          }
+        ]
       }
     ]
   },

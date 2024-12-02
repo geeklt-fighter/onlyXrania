@@ -55,7 +55,7 @@ const WeeklyPicks: FC = () => {
   };
 
   return (
-    <section className="relative bg-black/90 py-32 sm:py-40 overflow-hidden">
+    <section id="premium" className="relative bg-black/90 py-32 sm:py-40 overflow-hidden">
       {/* 注入結構化數據 */}
       <script
         type="application/ld+json"
