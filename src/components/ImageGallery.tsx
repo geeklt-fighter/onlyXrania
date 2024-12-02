@@ -7,6 +7,12 @@ import Link from 'next/link';
 
 const images = [
   {
+    src: "/images/hero/1k_ins_04583_.png",
+    alt: "Rania in luxury lingerie",
+    title: "Luxury Lingerie",
+    folder: "luxury-lingerie"
+  },
+  {
     src: "/images/hero/1k_ins_02165_.png",
     alt: "Rania posing elegantly in black lace lingerie with seductive gaze",
     title: "Midnight Temptation",

@@ -9,6 +9,7 @@ import { galleryCache } from './cache';
 import type { BlobImage } from './types';
 import { galleryConfig } from './config';
 import { ImageModal } from './components/ImageModal';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 
 // 圖片卡片組件
 const ImageCard = ({ image, currentImage, index }: { 
@@ -158,96 +159,91 @@ function GalleryContent() {
   };
 
   return (
-    <main className="min-h-screen bg-black/95 py-16">
-      <div className="container mx-auto px-4">
-        <nav className="absolute top-8 left-8">
-          <Link
-            href="/"
-            className="inline-flex items-center px-4 py-2 rounded-full 
-                     bg-white/10 backdrop-blur-sm 
-                     text-sm text-white/90 
-                     hover:bg-white/20 transition-colors
-                     border border-white/10"
-            aria-label="Return to homepage"
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-gray-900 to-black">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/80 to-transparent">
+        <div className="container mx-auto px-6 py-4">
+          <Link 
+            href="/" 
+            className="inline-flex items-center space-x-2 text-white/80 hover:text-white transition-colors"
           >
-            <svg 
-              className="w-4 h-4 mr-2" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M10 19l-7-7m0 0l7-7m-7 7h18" 
-              />
-            </svg>
-            Back to Home
+            <ArrowLeftIcon className="w-5 h-5" />
+            <span>Back to Home</span>
           </Link>
-        </nav>
+        </div>
+      </div>
 
-        <header className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-white mb-4">Photo Gallery</h1>
-          <p className="text-gray-400">Browse through our collection</p>
-        </header>
+      <main className="relative pt-24">
+        <div className="container mx-auto px-6">
+          <div className="max-w-4xl mx-auto text-center mb-16">
+            <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white/90 via-white to-white/90 text-transparent bg-clip-text">
+              Image Gallery Collections
+            </h1>
+            <p className="text-lg text-white/60">
+              Explore our carefully curated photo collections
+            </p>
+          </div>
 
-        <nav className="flex justify-center gap-4 mb-12 flex-wrap" aria-label="Gallery categories">
-          {galleryConfig.folders.map((folder) => (
-            <button
-              key={folder.id}
-              onClick={() => setActiveFolder(folder.id)}
-              className={`px-6 py-2 rounded-full text-sm font-medium 
-                transition-all duration-300
-                hover:scale-105 active:scale-95
-                ${activeFolder === folder.id 
-                  ? 'bg-amber-200 text-black' 
-                  : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
-              title={folder.description}
-              aria-current={activeFolder === folder.id ? 'page' : undefined}
-            >
-              {folder.name}
-            </button>
-          ))}
-        </nav>
+          <nav className="flex flex-wrap justify-center gap-3 mb-16">
+            {galleryConfig.folders.map((folder) => (
+              <button
+                key={folder.id}
+                onClick={() => setActiveFolder(folder.id)}
+                className={`px-6 py-2.5 rounded-full border transition-all duration-300 ${
+                  activeFolder === folder.id
+                    ? 'bg-white text-black border-white'
+                    : 'bg-transparent text-white/80 border-white/20 hover:border-white/60'
+                }`}
+              >
+                {folder.name}
+              </button>
+            ))}
+          </nav>
 
-        <section aria-label="Gallery images">
-          {loading ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {[...Array(8)].map((_, index) => (
-                <div 
-                  key={index}
-                  className="aspect-[3/4] rounded-xl bg-gray-800 animate-pulse"
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {visibleImages.map((image, index) => (
-                <ImageCard 
-                  key={image.url}
-                  image={image}
-                  currentImage={currentImage}
-                  index={index}
-                />
-              ))}
+          <section 
+            aria-label="Gallery images" 
+            className="relative min-h-[400px]"
+          >
+            {loading ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                {[...Array(8)].map((_, index) => (
+                  <div 
+                    key={index}
+                    className="aspect-[3/4] rounded-2xl bg-white/5 animate-pulse"
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                {visibleImages.map((image, index) => (
+                  <ImageCard 
+                    key={image.url}
+                    image={image}
+                    currentImage={currentImage}
+                    index={index}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
+
+          {error && (
+            <div className="flex items-center justify-center min-h-[400px]">
+              <div className="text-center text-red-400/90 bg-red-500/10 px-8 py-4 rounded-2xl">
+                {error}
+              </div>
             </div>
           )}
-        </section>
 
-        {error && (
-          <div className="text-center text-red-400 py-20">
-            {error}
-          </div>
-        )}
-
-        {!loading && !error && visibleImages.length === 0 && (
-          <div className="text-center text-white/70 py-20">
-            No images found in this folder
-          </div>
-        )}
-      </div>
-    </main>
+          {!loading && !error && visibleImages.length === 0 && (
+            <div className="flex items-center justify-center min-h-[400px]">
+              <div className="text-center text-white/60 bg-white/5 px-8 py-4 rounded-2xl">
+                No images found in this collection
+              </div>
+            </div>
+          )}
+        </div>
+      </main>
+    </div>
   );
 }
 

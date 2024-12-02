@@ -12,6 +12,12 @@ export interface GalleryConfig {
 export const galleryConfig: GalleryConfig = {
   folders: [
     {
+      id: 'luxury-lingerie',
+      name: 'Luxury Lingerie',
+      path: 'Luxury Lingerie',
+      description: 'Rania in luxury lingerie'
+    },
+    {
       id: 'midnight-temptation',
       name: 'Midnight Temptation',
       path: 'Midnight Temptation',

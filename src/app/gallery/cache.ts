@@ -1,7 +1,7 @@
 import type { BlobImage, CacheData } from './types';
 
 const CACHE_KEY_PREFIX = 'gallery_cache_';
-const CACHE_EXPIRY = 1000 * 60 * 5; // 5分鐘緩存
+const CACHE_EXPIRY = 1000 * 60 * 30; // 5分鐘緩存
 
 export const galleryCache = {
   getKey(folder: string) {
