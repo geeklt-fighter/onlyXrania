@@ -9,22 +9,26 @@ const images = [
   {
     src: "/images/hero/1k_ins_02165_.png",
     alt: "Rania posing elegantly in black lace lingerie with seductive gaze",
-    title: "Midnight Temptation"
+    title: "Midnight Temptation",
+    folder: "midnight-temptation"
   },
   {
     src: "/images/hero/1k_ins_02257_.png",
     alt: "Rania in alluring satan displaying confident pose",
-    title: "Dark Romance"
+    title: "Dark Romance",
+    folder: "dark-romance"
   },
   {
     src: "/images/hero/1k_ins_04076_.png",
     alt: "Rania in intimate boudoir setting with lace details",
-    title: "Sweet Surrender"
+    title: "Sweet Surrender",
+    folder: "sweet-surrender"
   },
   {
     src: "/images/hero/1k_ins_04118_.png",
     alt: "Rania in sophisticated pose wearing premium outfit",
-    title: "Elegant Seduction"
+    title: "Elegance Seduction",
+    folder: "elegance-seduction"
   }
   // 可以添加更多圖片
 ];
@@ -79,12 +83,14 @@ const ImageGallery: FC = () => {
     }, 500); // 與動畫時間相匹配
   }, [isAnimating]);
 
-  // 處理導航點擊
+  // 處理��航點擊
   const handleDotClick = useCallback((targetIndex: number) => {
     if (isAnimating) return;
     const currentIndex = visibleIndices[1];
     if (targetIndex === currentIndex) return;
     
+    console.log('Navigating to image:', images[targetIndex]);
+
     setIsAnimating(true);
     const direction = targetIndex > currentIndex ? 'right' : 'left';
     setSlideDirection(direction);
@@ -160,7 +166,8 @@ const ImageGallery: FC = () => {
                       href={{
                         pathname: '/gallery',
                         query: { 
-                          currentImage: images[imageIndex].src
+                          currentImage: images[imageIndex].src,
+                          folder: images[imageIndex].folder
                         }
                       }}
                       className="inline-flex px-4 py-1.5 rounded-full 
