@@ -93,8 +93,14 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   i18n: {
-    locales: ['en-US', 'en-GB'],
+    locales: ['en-US', 'en-GB', 'en-CA', 'en-AU'],
     defaultLocale: 'en-US',
+    domains: [
+      {
+        domain: 'only-x-rania.vercel.app',
+        defaultLocale: 'en-US',
+      }
+    ]
   },
 };
 

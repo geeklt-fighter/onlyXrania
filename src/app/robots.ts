@@ -12,6 +12,9 @@ export default function robots(): MetadataRoute.Robots {
         '/api/',     // API 路徑禁止爬蟲
         '/_next/',   // Next.js 內部文件禁止爬蟲
         '/fonts/',   // 字體文件禁止爬蟲
+        '/in/', // 印度
+        '/cn/', // 中國
+        '/ru/', // 俄羅斯
       ]
     },
     sitemap: 'https://only-x-rania.vercel.app/sitemap.xml',  // 你的 Vercel 部署網址

@@ -148,6 +148,8 @@ export default function RootLayout({
           as="image"
         />
         <meta name="revisit-after" content="3 days" />
+        <link rel="alternate" hrefLang="en" href="https://only-x-rania.vercel.app/en-US" />
+        <link rel="alternate" hrefLang="x-default" href="https://only-x-rania.vercel.app" />
       </head>
       <body className={`${montserrat.variable} ${playfair.variable} font-sans`}>
         {children}
