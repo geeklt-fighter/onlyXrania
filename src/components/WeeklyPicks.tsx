@@ -5,16 +5,16 @@ import ScrollReveal from '@/components/animations/ScrollReveal';
 
 const weeklyPicks = [
   {
-    title: "Someone Is Thirsty...",
-    description: " I can feel it from here. Don’t even try to hide it—I know exactly what you’re thinking as your eyes trace every curve. This little red number?",
-    image: "/images/series/4k_exp_ins_00001_.png",
-    url: "https://www.patreon.com/posts/someone-is-116103931?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=postshare_creator&utm_content=join_link"
+    title: "Winter is coming. Feeling a Little Cold? Come Warm Up with Me... 🔥😘",
+    description: " I’ve got something cozy in mind for you. 😘 These sheer black tights are keeping me warm, but I’d much rather have you close to heat things up. Imagine your hands gently tracing every curve... doesn’t that sound tempting? ...",
+    image: "/images/series/1k_ins_04443.png",
+    url: "https://www.patreon.com/posts/winter-is-coming-116791598?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=postshare_creator&utm_content=join_link"
   },
   {
-    title: "Feeling a Little Daring Tonight? 🔥",
-    description: "Hey, babe! Tonight, I wanted to step it up with something extra edgy—cutouts along the sides and harness-style straps, giving this lingerie a bold, bondage-inspired vibe. It’s the perfect mix of daring and sensual, just for you. 💋",
-    image: "/images/series/1k_ins_03832_.png",
-    url: "https://www.patreon.com/posts/feeling-little-116029811?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=postshare_creator&utm_content=join_link"
+    title: "Unwrap Me... I’m Feeling Naughty 💋",
+    description: "I’ve got a secret… a whole collection of the weirdest panties you could imagine. From funky to fun, to a little bit daring, these panties are far from your ordinary lingerie...",
+    image: "/images/series/1k_ins_04493.png",
+    url: "https://www.patreon.com/posts/unwrap-me-im-116858254?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=postshare_creator&utm_content=join_link"
   },
   {
     title: "Taking It Up a Notch for My Sweetie",
